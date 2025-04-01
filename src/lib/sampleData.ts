@@ -1,10 +1,8 @@
-import { PrismaClient } from '@prisma/client';
 import { addDays, subDays } from 'date-fns';
-
-const prisma = new PrismaClient();
+import type { JobFormData } from './types';
 
 // Create an array of job applications with variety in status
-const sampleData = [
+export const sampleData: JobFormData[] = [
   // APPLIED jobs (remained at applied stage)
   {
     companyName: 'Google',
@@ -278,33 +276,4 @@ const sampleData = [
     status: 'WITHDRAWN',
     notes: 'Withdrew after learning more about the role'
   },
-];
-
-// Total number of job applications in our seed data
-console.log(`Total number of jobs in seed data: ${sampleData.length}`);
-
-async function main() {
-  console.log('Start seeding...');
-  
-  // Clear existing data
-  await prisma.jobApplication.deleteMany();
-  
-  // Insert sample data
-  for (const data of sampleData) {
-    const job = await prisma.jobApplication.create({
-      data,
-    });
-    console.log(`Created job application with id: ${job.id}`);
-  }
-  
-  console.log('Seeding finished.');
-}
-
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  }); 
+]; 

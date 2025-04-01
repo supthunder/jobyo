@@ -6,50 +6,101 @@ import { JobSankeyChart } from '@/components/JobSankeyChart';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import type { JobApplication, JobFormData } from '@/lib/types';
+import Image from 'next/image';
+
+// Cookie helper functions
+const setCookie = (name: string, value: string, days: number = 365) => {
+  const date = new Date();
+  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+};
+
+const getCookie = (name: string): string | null => {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+};
 
 export default function Home() {
   const [jobs, setJobs] = useState<JobApplication[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
-    fetchJobs();
+    loadJobsFromCookie();
     // Set dark mode
     document.documentElement.classList.add('dark');
   }, []);
 
-  const fetchJobs = async () => {
-    try {
-      const response = await fetch('/api/jobs');
-      const data = await response.json();
-      setJobs(data);
-    } catch (error) {
-      console.error('Error fetching jobs:', error);
+  const loadJobsFromCookie = () => {
+    const jobsCookie = getCookie('jobApplications');
+    if (jobsCookie) {
+      try {
+        const parsedJobs = JSON.parse(jobsCookie);
+        // Ensure dates are parsed correctly
+        const jobsWithDates = parsedJobs.map((job: any) => ({
+          ...job,
+          dateApplied: new Date(job.dateApplied),
+          createdAt: job.createdAt ? new Date(job.createdAt) : new Date(),
+          updatedAt: job.updatedAt ? new Date(job.updatedAt) : new Date(),
+        }));
+        setJobs(jobsWithDates);
+      } catch (error) {
+        console.error('Error parsing jobs from cookie:', error);
+        setJobs([]);
+      }
+    } else {
+      // Load sample data from seed.ts when cookie doesn't exist
+      fetch('/api/jobs')
+        .then(response => response.json())
+        .then(data => {
+          setJobs(data);
+          saveToCookie(data);
+        })
+        .catch(error => {
+          console.error('Error fetching initial data:', error);
+        });
     }
   };
 
+  const saveToCookie = (jobsData: JobApplication[]) => {
+    setCookie('jobApplications', JSON.stringify(jobsData));
+  };
+
   const handleSubmit = async (data: JobFormData) => {
-    try {
-      await fetch('/api/jobs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      setIsDialogOpen(false);
-      fetchJobs();
-    } catch (error) {
-      console.error('Error creating job:', error);
-    }
+    const newJob: JobApplication = {
+      ...data,
+      id: `job_${Date.now()}`, // Generate a simple ID
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    
+    const updatedJobs = [...jobs, newJob];
+    setJobs(updatedJobs);
+    saveToCookie(updatedJobs);
+    setIsDialogOpen(false);
   };
 
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="container max-w-5xl mx-auto px-4 py-8 space-y-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Job Search Tracker
-          </h1>
+          <div className="flex items-center gap-3">
+            <Image 
+              src="/logo.png" 
+              alt="Jobby Logo" 
+              width={40} 
+              height={40} 
+              className="rounded-md"
+            />
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Jobby
+            </h1>
+          </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button 
