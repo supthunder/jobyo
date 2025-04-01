@@ -13,11 +13,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jobby - Job Application Tracker",
+  title: "Job Application Tracker",
   description: "Track your job applications with ease",
   icons: {
-    icon: '/logo.png',
+    icon: [
+      { url: '/logo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/logo.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: { url: '/logo.png', sizes: '180x180', type: 'image/png' },
+    shortcut: { url: '/logo.png' },
   },
+  manifest: '/manifest.json',
+  themeColor: '#2c9f42',
 };
 
 export default function RootLayout({
@@ -27,6 +34,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

@@ -1,10 +1,10 @@
-# Job Application Tracker
-
-<p align="center">
-  <img src="./public/logo.png" alt="Jobby Logo" width="300" />
-</p>
+# Jobby - Job Application Tracker
 
 Jobby is a modern web application built with Next.js and Prisma that helps job seekers track and visualize their job application progress. The application features a clean UI, intuitive job entry form, and interactive Sankey chart visualization to track the flow of applications through different stages.
+
+<p align="center">
+  <img src="./public/logo.png" alt="Jobby Logo" width="150" />
+</p>
 
 ## Table of Contents
 

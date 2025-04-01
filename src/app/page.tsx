@@ -93,13 +93,10 @@ export default function Home() {
             <Image 
               src="/logo.png" 
               alt="Jobby Logo" 
-              width={40} 
-              height={40} 
+              width={80} 
+              height={80} 
               className="rounded-md"
             />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Jobby
-            </h1>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
