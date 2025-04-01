@@ -87,7 +87,7 @@ export function JobForm({ onSubmit, initialData }: JobFormProps) {
       <div>
         <Label htmlFor="status" className="text-sm font-medium text-foreground/90">Status</Label>
         <Select
-          onValueChange={(value) => setValue('status', value as any)}
+          onValueChange={(value) => setValue('status', value as (typeof jobStatuses)[number])}
           defaultValue={initialData?.status || 'APPLIED'}
         >
           <SelectTrigger className="mt-1.5 bg-background/50 border-border/50 focus:ring-primary/20">

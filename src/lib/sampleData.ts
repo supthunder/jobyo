@@ -1,4 +1,4 @@
-import { addDays, subDays } from 'date-fns';
+import { subDays } from 'date-fns';
 import type { JobFormData } from './types';
 
 // Create an array of job applications with variety in status

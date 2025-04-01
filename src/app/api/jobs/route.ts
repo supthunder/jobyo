@@ -8,7 +8,7 @@ let prisma: PrismaClient;
 
 try {
   prisma = new PrismaClient();
-} catch (error) {
+} catch (_) {
   console.warn('PrismaClient initialization failed, using sample data fallback');
 }
 
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-  } catch (error) {
+  } catch (_) {
     return NextResponse.json({ error: 'Error creating job application' }, { status: 500 });
   }
 }
@@ -57,8 +57,8 @@ export async function GET() {
     }));
     
     return NextResponse.json(formattedSampleData);
-  } catch (error) {
-    console.error('Error fetching jobs, using sample data:', error);
+  } catch (err) {
+    console.error('Error fetching jobs, using sample data:', err);
     
     // Return sample data in case of any error
     const formattedSampleData = sampleData.map((job: JobFormData) => ({
@@ -91,7 +91,7 @@ export async function PUT(req: Request) {
       ...body,
       updatedAt: new Date(),
     });
-  } catch (error) {
+  } catch (_) {
     return NextResponse.json({ error: 'Error updating job application' }, { status: 500 });
   }
 } 
