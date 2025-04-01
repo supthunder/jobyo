@@ -187,7 +187,7 @@ export default function Home() {
             
             {jobs.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                No job applications yet. Click "Add Job Application" to get started.
+                No job applications yet. Click &quot;Add Job Application&quot; to get started.
               </div>
             ) : (
               <div className="grid gap-4">

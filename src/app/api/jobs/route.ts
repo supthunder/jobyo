@@ -8,6 +8,7 @@ let prisma: PrismaClient;
 
 try {
   prisma = new PrismaClient();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 } catch (_) {
   console.warn('PrismaClient initialization failed, using sample data fallback');
 }
@@ -31,6 +32,7 @@ export async function POST(req: Request) {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_) {
     return NextResponse.json({ error: 'Error creating job application' }, { status: 500 });
   }
@@ -91,6 +93,7 @@ export async function PUT(req: Request) {
       ...body,
       updatedAt: new Date(),
     });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_) {
     return NextResponse.json({ error: 'Error updating job application' }, { status: 500 });
   }
